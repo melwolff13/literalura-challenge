@@ -7,6 +7,8 @@ import br.com.melissa.literalura.repository.LivroRepository;
 import br.com.melissa.literalura.service.ConsumoAPI;
 import br.com.melissa.literalura.service.Conversor;
 import br.com.melissa.literalura.service.LivroService;
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Principal {
@@ -42,65 +44,93 @@ public class Principal {
                     
                     0 - sair
                     """);
-            opcao = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                opcao = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (opcao) {
-                case 1:
-                    buscarLivrosPorTitulo();
-                    break;
-                case 2:
-                    listarLivrosRegistrados();
-                    break;
-                case 3:
-                    listarAutoresRegistrados();
-                    break;
-                case 4:
-                    listarAutoresVivosEmAno();
-                    break;
-                case 5:
-                    listarLivrosPorIdioma();
-                    break;
-                case 0:
-                    System.out.println("\nEncerrando aplicação...");
-                    break;
-                default:
-                    System.out.println("\nOpção inválida!");
+                switch (opcao) {
+                    case 1:
+                        buscarLivrosPorTitulo();
+                        break;
+                    case 2:
+                        listarLivrosRegistrados();
+                        break;
+                    case 3:
+                        listarAutoresRegistrados();
+                        break;
+                    case 4:
+                        listarAutoresVivosEmAno();
+                        break;
+                    case 5:
+                        listarLivrosPorIdioma();
+                        break;
+                    case 0:
+                        System.out.println("\nEncerrando aplicação...\n");
+                        break;
+                    default:
+                        System.err.println("\nEntrada inválida. Digite o código de uma das opções listadas.\n");
+                }
+            } catch (InputMismatchException e) {
+                System.err.println("\nEntrada inválida. Digite o código de uma das opções listadas.\n");
+                scanner.nextLine();
             }
         }
     }
 
-    private void buscarLivrosPorTitulo() {
-        System.out.println("Titulo:");
+    private RespostaAPI getDadosLivro() {
+        System.out.println("\nTitulo:");
         var titulo = scanner.nextLine();
-        var json = consumoAPI.obterDados(endereco + titulo.trim().toLowerCase().replace(" ", "+"));
+        var url = endereco + titulo.trim().toLowerCase().replace(" ", "+");
+        var json = consumoAPI.obterDados(url);
         var resultado = conversor.converte(json, RespostaAPI.class);
-        var livro = livroService.salvarLivro(resultado);
+        if (!resultado.resultados().isEmpty()) {
+            return resultado;
+        }
+        System.out.printf("\nNenhum livro '%s' encontrado.\n", (titulo));
+        return null;
+    }
 
-        System.out.println(livro);
+    private void buscarLivrosPorTitulo() {
+        var resultado = getDadosLivro();
+        if (resultado != null) {
+            var livro = livroService.salvarLivro(resultado);
+            System.out.println(livro);
+        }
     }
 
     private void listarLivrosRegistrados() {
+        System.out.println("\n--- Livros registrados ---");
         var livrosRegistrados = livroRepositorio.findAll();
         livrosRegistrados.forEach(System.out::println);
     }
 
     private void listarAutoresRegistrados() {
+        System.out.println("\n--- Autores registrados ---");
         var livrosRegistrados = autorRepositorio.findAll();
         livrosRegistrados.forEach(System.out::println);
     }
 
     private void listarAutoresVivosEmAno() {
-        System.out.println("Ano:");
-        var ano = scanner.nextInt();
-        scanner.nextLine();
-        var autores = autorRepositorio.listarAutoresVivosEm(ano);
-        autores.forEach(System.out::println);
+        System.out.println("\nAno:");
+        try {
+            var ano = scanner.nextInt();
+            scanner.nextLine();
+            var autores = autorRepositorio.listarAutoresVivosEm(ano);
+
+            if (!autores.isEmpty()) {
+                autores.forEach(System.out::println);
+            } else {
+                System.out.println("\nNenhum autor encontrado.");
+            }
+        } catch (InputMismatchException e) {
+            System.err.println("\nEntrada inválida.");
+            scanner.nextLine();
+        }
     }
 
     private void listarLivrosPorIdioma() {
         System.out.println("""
-                Digite a sigla do idioma:
+                \nDigite a sigla do idioma:
                 
                 pt - português
                 en - inglês
@@ -112,9 +142,10 @@ public class Principal {
         if (idioma != null) {
             var livros = livroRepositorio.livrosPorIdioma(idioma);
             if (!livros.isEmpty()) {
+                System.out.printf("\n--- Livros em %s ---\n", (idioma));
                 livros.forEach(System.out::println);
             } else {
-                System.out.println("Nenhum livro em " + idioma + " registrado.");
+                System.out.println("\nNenhum livro em " + idioma + " registrado.");
             }
         }
     }
