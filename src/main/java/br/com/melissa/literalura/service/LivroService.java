@@ -1,5 +1,8 @@
 package br.com.melissa.literalura.service;
 
+import br.com.melissa.literalura.dto.Autor;
+import br.com.melissa.literalura.dto.Idioma;
+import br.com.melissa.literalura.dto.Livro;
 import br.com.melissa.literalura.model.*;
 import br.com.melissa.literalura.repository.AutorRepository;
 import br.com.melissa.literalura.repository.LivroRepository;
