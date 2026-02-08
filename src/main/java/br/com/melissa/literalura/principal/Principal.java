@@ -96,7 +96,9 @@ public class Principal {
         var resultado = getDadosLivro();
         if (resultado != null) {
             var livro = livroService.salvarLivro(resultado);
-            System.out.println(livro);
+            if (livro != null) {
+                System.out.println(livro);
+            }
         }
     }
 
