@@ -67,6 +67,7 @@ public class Principal {
                         listarLivrosPorIdioma();
                         break;
                     case 0:
+                        scanner.close();
                         System.out.println("\nEncerrando aplicação...\n");
                         break;
                     default:
@@ -82,6 +83,10 @@ public class Principal {
     private RespostaAPI getDadosLivro() {
         System.out.println("\nTitulo:");
         var titulo = scanner.nextLine();
+        if (titulo.trim().isEmpty()) {
+            System.err.println("Entrada inválda. O título não pode estar vazio.");
+            return null;
+        }
         var url = endereco + titulo.trim().toLowerCase().replace(" ", "+");
         var json = consumoAPI.obterDados(url);
         var resultado = conversor.converte(json, RespostaAPI.class);
