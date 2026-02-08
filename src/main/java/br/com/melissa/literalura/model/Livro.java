@@ -2,8 +2,6 @@ package br.com.melissa.literalura.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "livros")
 public class Livro {
@@ -13,12 +11,13 @@ public class Livro {
     private String titulo;
     @ManyToOne
     private Autor autor;
-    private String idioma;
+    @Enumerated(EnumType.STRING)
+    private Idioma idioma;
     private Integer downloads;
 
     public Livro() {}
 
-    public Livro(String titulo, Autor autor, String idioma, Integer downloads) {
+    public Livro(String titulo, Autor autor, Idioma idioma, Integer downloads) {
         this.titulo = titulo;
         this.autor = autor;
         this.idioma = idioma;
@@ -49,11 +48,11 @@ public class Livro {
         this.autor = autor;
     }
 
-    public String getIdioma() {
+    public Idioma getIdioma() {
         return idioma;
     }
 
-    public void setIdioma(String idioma) {
+    public void setIdioma(Idioma idioma) {
         this.idioma = idioma;
     }
 

@@ -1,12 +1,12 @@
 package br.com.melissa.literalura.principal;
 
+import br.com.melissa.literalura.model.Idioma;
 import br.com.melissa.literalura.model.RespostaAPI;
 import br.com.melissa.literalura.repository.AutorRepository;
 import br.com.melissa.literalura.repository.LivroRepository;
 import br.com.melissa.literalura.service.ConsumoAPI;
 import br.com.melissa.literalura.service.Conversor;
 import br.com.melissa.literalura.service.LivroService;
-
 import java.util.Scanner;
 
 public class Principal {
@@ -59,7 +59,7 @@ public class Principal {
                     listarAutoresVivosEmAno();
                     break;
                 case 5:
-                    //listarLivrosPorIdioma();
+                    listarLivrosPorIdioma();
                     break;
                 case 0:
                     System.out.println("\nEncerrando aplicação...");
@@ -96,6 +96,27 @@ public class Principal {
         scanner.nextLine();
         var autores = autorRepositorio.listarAutoresVivosEm(ano);
         autores.forEach(System.out::println);
+    }
+
+    private void listarLivrosPorIdioma() {
+        System.out.println("""
+                Digite a sigla do idioma:
+                
+                pt - português
+                en - inglês
+                es - espanhol
+                fr - francês
+                """);
+        String sigla = scanner.nextLine();
+        Idioma idioma = Idioma.fromSigla(sigla);
+        if (idioma != null) {
+            var livros = livroRepositorio.livrosPorIdioma(idioma);
+            if (!livros.isEmpty()) {
+                livros.forEach(System.out::println);
+            } else {
+                System.out.println("Nenhum livro em " + idioma + " registrado.");
+            }
+        }
     }
 }
 
