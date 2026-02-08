@@ -1,17 +1,21 @@
 package br.com.melissa.literalura.principal;
 
+import br.com.melissa.literalura.model.Autor;
 import br.com.melissa.literalura.model.Livro;
 import br.com.melissa.literalura.model.RespostaAPI;
 import br.com.melissa.literalura.repository.AutorRepository;
 import br.com.melissa.literalura.repository.LivroRepository;
 import br.com.melissa.literalura.service.ConsumoAPI;
 import br.com.melissa.literalura.service.Conversor;
+import br.com.melissa.literalura.service.LivroService;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Principal {
     private AutorRepository autorRepositorio;
     private LivroRepository livroRepositorio;
+    private LivroService livroService;
 
     private String endereco = "https://gutendex.com/books/?search=";
     private Scanner scanner = new Scanner(System.in);
@@ -20,9 +24,10 @@ public class Principal {
 
     public Principal() {}
 
-    public Principal(AutorRepository autorRepositorio, LivroRepository livroRepositorio) {
+    public Principal(AutorRepository autorRepositorio, LivroRepository livroRepositorio, LivroService livroService) {
         this.autorRepositorio = autorRepositorio;
         this.livroRepositorio = livroRepositorio;
+        this.livroService = livroService;
     }
 
     public void exibeMenu() {
@@ -48,7 +53,7 @@ public class Principal {
                     buscarLivrosPorTitulo();
                     break;
                 case 2:
-                    //listarLivrosRegistrados();
+                    listarLivrosRegistrados();
                     break;
                 case 3:
                     //listarAutoresRegistrados();
@@ -73,7 +78,13 @@ public class Principal {
         var titulo = scanner.nextLine();
         var json = consumoAPI.obterDados(endereco + titulo.trim().toLowerCase().replace(" ", "+"));
         var resultado = conversor.converte(json, RespostaAPI.class);
-        Livro livro = new Livro(resultado);
+        var livro = livroService.salvarLivro(resultado);
+
         System.out.println(livro);
+    }
+
+    private void listarLivrosRegistrados() {
+        var livrosRegistrados = livroRepositorio.findAll();
+        livrosRegistrados.forEach(System.out::println);
     }
 }

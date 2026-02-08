@@ -18,12 +18,11 @@ public class Livro {
 
     public Livro() {}
 
-    public Livro(RespostaAPI respostaAPI) {
-        var resposta = respostaAPI.resultados().getFirst();
-        this.titulo = resposta.titulo();
-        this.autor = new Autor(resposta.autores().getFirst());
-        this.idioma = resposta.lingua().getFirst();
-        this.downloads = resposta.downloads();
+    public Livro(String titulo, Autor autor, String idioma, Integer downloads) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.idioma = idioma;
+        this.downloads = downloads;
     }
 
     public Long getId() {
@@ -68,6 +67,6 @@ public class Livro {
 
     @Override
     public String toString() {
-        return "\"" + titulo + "\", " + autor ;
+        return "\"" + titulo + "\", " + autor;
     }
 }

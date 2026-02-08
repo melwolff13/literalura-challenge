@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "autores")
@@ -15,7 +14,7 @@ public class Autor {
     private String nome;
     private Integer anoNascimento;
     private Integer anoFalecimento;
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "autor")
     private List<Livro> livros;
 
     public Autor() {}
