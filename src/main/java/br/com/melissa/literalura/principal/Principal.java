@@ -1,7 +1,5 @@
 package br.com.melissa.literalura.principal;
 
-import br.com.melissa.literalura.model.Autor;
-import br.com.melissa.literalura.model.Livro;
 import br.com.melissa.literalura.model.RespostaAPI;
 import br.com.melissa.literalura.repository.AutorRepository;
 import br.com.melissa.literalura.repository.LivroRepository;
@@ -9,7 +7,6 @@ import br.com.melissa.literalura.service.ConsumoAPI;
 import br.com.melissa.literalura.service.Conversor;
 import br.com.melissa.literalura.service.LivroService;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 public class Principal {
@@ -42,7 +39,7 @@ public class Principal {
                     3 - listar autores registrados
                     4 - listar autores vivos em um determinado ano
                     5 - listar livros em um determinado idioma
-
+                    
                     0 - sair
                     """);
             opcao = scanner.nextInt();
@@ -56,10 +53,10 @@ public class Principal {
                     listarLivrosRegistrados();
                     break;
                 case 3:
-                    //listarAutoresRegistrados();
+                    listarAutoresRegistrados();
                     break;
                 case 4:
-                    //listarAutoresVivosEmAno();
+                    listarAutoresVivosEmAno();
                     break;
                 case 5:
                     //listarLivrosPorIdioma();
@@ -87,4 +84,19 @@ public class Principal {
         var livrosRegistrados = livroRepositorio.findAll();
         livrosRegistrados.forEach(System.out::println);
     }
+
+    private void listarAutoresRegistrados() {
+        var livrosRegistrados = autorRepositorio.findAll();
+        livrosRegistrados.forEach(System.out::println);
+    }
+
+    private void listarAutoresVivosEmAno() {
+        System.out.println("Ano:");
+        var ano = scanner.nextInt();
+        scanner.nextLine();
+        var autores = autorRepositorio.listarAutoresVivosEm(ano);
+        autores.forEach(System.out::println);
+    }
 }
+
+
