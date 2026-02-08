@@ -66,6 +66,6 @@ public class Livro {
 
     @Override
     public String toString() {
-        return "\"" + titulo + "\", " + autor;
+        return titulo + ", de " + autor + " [" + downloads + " downloads]";
     }
 }

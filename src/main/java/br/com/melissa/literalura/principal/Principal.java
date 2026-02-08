@@ -1,6 +1,8 @@
 package br.com.melissa.literalura.principal;
 
+import br.com.melissa.literalura.model.Autor;
 import br.com.melissa.literalura.model.Idioma;
+import br.com.melissa.literalura.model.Livro;
 import br.com.melissa.literalura.model.RespostaAPI;
 import br.com.melissa.literalura.repository.AutorRepository;
 import br.com.melissa.literalura.repository.LivroRepository;
@@ -99,15 +101,35 @@ public class Principal {
     }
 
     private void listarLivrosRegistrados() {
-        System.out.println("\n--- Livros registrados ---");
+        System.out.println("\n----- Livros registrados -----");
         var livrosRegistrados = livroRepositorio.findAll();
-        livrosRegistrados.forEach(System.out::println);
+        if (!livrosRegistrados.isEmpty()) {
+            for (Livro livro : livrosRegistrados) {
+                System.out.println("• " + livro);
+            }
+        } else {
+            System.out.println("\nNenhum livro registrado");
+        }
+    }
+
+    private void listarLivrosPorAutor(Autor autor) {
+        var livros = livroRepositorio.findByAutor(autor);
+        for (Livro livro : livros) {
+            System.out.println("  • " + livro.getTitulo());
+        }
     }
 
     private void listarAutoresRegistrados() {
-        System.out.println("\n--- Autores registrados ---");
-        var livrosRegistrados = autorRepositorio.findAll();
-        livrosRegistrados.forEach(System.out::println);
+        System.out.println("\n----- Autores registrados -----");
+        var autoresRegistrados = autorRepositorio.findAll();
+        if (!autoresRegistrados.isEmpty()) {
+            for (Autor autor : autoresRegistrados) {
+                System.out.println("► " + autor);
+                listarLivrosPorAutor(autor);
+            }
+        } else {
+            System.out.println("\nNenhum autor registrado.");
+        }
     }
 
     private void listarAutoresVivosEmAno() {
@@ -118,7 +140,10 @@ public class Principal {
             var autores = autorRepositorio.listarAutoresVivosEm(ano);
 
             if (!autores.isEmpty()) {
-                autores.forEach(System.out::println);
+                System.out.printf("\n----- Autores vivos em %d -----\n", (ano));
+                for (Autor autor : autores) {
+                    System.out.println("► " + autor);
+                }
             } else {
                 System.out.println("\nNenhum autor encontrado.");
             }
@@ -143,7 +168,9 @@ public class Principal {
             var livros = livroRepositorio.livrosPorIdioma(idioma);
             if (!livros.isEmpty()) {
                 System.out.printf("\n--- Livros em %s ---\n", (idioma));
-                livros.forEach(System.out::println);
+                for (Livro livro : livros) {
+                    System.out.println("• " + livro);
+                }
             } else {
                 System.out.println("\nNenhum livro em " + idioma + " registrado.");
             }

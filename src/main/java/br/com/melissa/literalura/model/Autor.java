@@ -68,6 +68,8 @@ public class Autor {
     @Override
     public String toString() {
         // nome = "Kafka, Franz" -> ["Kafka", "Franz"] -> ["Franz", "Kafka"] -> "Franz Kafka"
-        return String.join(" ", Arrays.asList(nome.split(", ")).reversed()) + " (" + anoNascimento + " - " + anoFalecimento + ")";
+        var nomeAutor = String.join(" ", Arrays.asList(nome.split(", ")).reversed());
+
+        return nomeAutor + " (" + anoNascimento + "-" + anoFalecimento + ")";
     }
 }
