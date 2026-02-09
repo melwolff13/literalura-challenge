@@ -1,4 +1,4 @@
-![banner.png](images/banner.png)
+![banner.png](src/main/java/br/com/melissa/literalura/images/banner.png)
 
 ![](https://img.shields.io/badge/JAVA-FCC61D)
 ![](https://img.shields.io/badge/SPRING%20BOOT-6CA651)
