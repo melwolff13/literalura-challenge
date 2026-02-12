@@ -1,6 +1,6 @@
-package br.com.melissa.literalura.dto;
+package br.com.melissa.literalura.model;
 
-import br.com.melissa.literalura.model.DadosAutor;
+import br.com.melissa.literalura.dto.DadosAutor;
 import jakarta.persistence.*;
 
 import java.util.Arrays;

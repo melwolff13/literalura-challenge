@@ -1,4 +1,4 @@
-package br.com.melissa.literalura.dto;
+package br.com.melissa.literalura.model;
 
 public enum Idioma {
     PORTUGUES("pt"),

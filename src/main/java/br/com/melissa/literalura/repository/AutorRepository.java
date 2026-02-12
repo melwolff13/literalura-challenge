@@ -1,6 +1,6 @@
 package br.com.melissa.literalura.repository;
 
-import br.com.melissa.literalura.dto.Autor;
+import br.com.melissa.literalura.model.Autor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
